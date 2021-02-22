@@ -16,7 +16,7 @@ const Route = ({ routeItem, onRouteDelete, onRouteEdit }) => {
 
   const openRoute = (route) => {
     return () => {
-      window.open(url.resolve(MOCKIT_SERVER_URL, route), '_blank');
+      window.open(MOCKIT_SERVER_URL+route, '_blank');
     };
   };
 
