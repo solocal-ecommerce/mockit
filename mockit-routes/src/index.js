@@ -4,7 +4,12 @@ const path = require('path');
 const app = express();
 const cors = require('cors');
 const handlebars = require("handlebars");
-const helpers = require('handlebars-helpers')({
+
+
+require('handlebars-helpers')({
+  handlebars: handlebars
+});
+require('./custom-helpers')({
   handlebars: handlebars
 });
 

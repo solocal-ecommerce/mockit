@@ -137,11 +137,19 @@ const exampleConfig = {
         },
         {
           header: 'Referer',
-          value: '{{ request.url }}'
+          value: '{{{ request.url }}}'
         },
         {
           header: 'UA',
-          value: '{{ request.headers.user-agent }}'
+          value: '{{{ request.headers.user-agent }}}'
+        },
+        {
+          header: 'Token',
+          value: '{{{ base64Encode "so.local:8443:no-secret" }}}'
+        },
+        {
+          header: 'Authorization',
+          value: '{{{ base64Decode "c28ubG9jYWw6ODQ0Mzpuby1zZWNyZXQ=" }}}'
         }
       ],
       disabled: false
@@ -208,7 +216,9 @@ describe('Mockit Routes', () => {
          await request(app).get('/redirectExample')
          .expect(301)
          .expect('Location', '/urlToRedirectTo')
-         .expect('Referer', '/redirectExample');
+         .expect('Referer', '/redirectExample')
+         .expect('Token', 'c28ubG9jYWw6ODQ0Mzpuby1zZWNyZXQ=')
+         .expect('Authorization', 'so.local:8443:no-secret');
       });
     });
 
