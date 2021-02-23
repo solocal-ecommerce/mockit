@@ -21,6 +21,8 @@ const STATUS_CODES = [
   StatusCodes.CREATED,
   StatusCodes.ACCEPTED,
   StatusCodes.NO_CONTENT,
+  StatusCodes.PERMANENT_REDIRECT,
+  StatusCodes.TEMPORARY_REDIRECT,
   StatusCodes.BAD_REQUEST,
   StatusCodes.UNAUTHORIZED,
   StatusCodes.FORBIDDEN,
