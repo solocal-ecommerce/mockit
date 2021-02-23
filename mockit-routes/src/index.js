@@ -3,6 +3,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const app = express();
 const cors = require('cors');
+const handlebars = require("handlebars");
 
 const port = process.env.PORT || 3000;
 
@@ -42,10 +43,26 @@ routes.forEach((route) => {
 
   if (!disabled) {
     app[method](path, (req, res) => {
+
+      const hbdata = {
+        request : req
+      };
+
       headers.forEach(({ header, value } = {}) => {
-        res.set(header, value);
+        const headerT = handlebars.compile(value);
+        res.set(header, headerT(hbdata));
       });
-      res.status(statusCode).send(payload);
+
+      res.status(statusCode)
+
+      if(payload){
+        const payloadT = handlebars.compile(JSON.stringify(payload));
+        res.send(JSON.parse(payloadT(hbdata)));
+      } else{
+        res.send();
+      }
+
+      
     });
   }
 });

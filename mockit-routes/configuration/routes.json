@@ -90,20 +90,32 @@
       "route": "/newRoute",
       "httpMethod": "GET",
       "statusCode": "200",
-      "delay": "1000",
-      "payload": {
-        "test": true
-      }
-    },
-    {
-      "id": "686819df-9cd4-4814-a75a-39f65ea76b8e",
-      "route": "/newRoute",
-      "httpMethod": "GET",
-      "statusCode": "200",
       "delay": "0",
       "payload": {
         "test": true
-      }
+      },
+      "headers": [
+        {
+          "header": "Referer",
+          "value": "{{request.url}}"
+        }
+      ]
+    },
+    {
+      "id": "686819df-9cd4-4814-a75a-39f65ea76b8e",
+      "route": "/301Route",
+      "httpMethod": "GET",
+      "statusCode": "301",
+      "delay": "0",
+      "payload": {
+        "test": true
+      },
+      "headers": [
+        {
+          "header": "Location",
+          "value": "https://www.google.com"
+        }
+      ]
     }
   ]
 }

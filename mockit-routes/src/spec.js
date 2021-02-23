@@ -33,7 +33,8 @@ const exampleConfig = {
       statusCode: '200',
       delay: '0',
       payload: {
-        test: true
+        test: true,
+        url: '{{ request.url }}' 
       },
       disabled: false
     },
@@ -123,6 +124,27 @@ const exampleConfig = {
         }
       ],
       disabled: false
+    },
+    {
+      route: '/redirectExample',
+      httpMethod: 'GET',
+      statusCode: '301',
+      delay: '0',
+      headers: [
+        {
+          header: 'Location',
+          value: '/urlToRedirectTo'
+        },
+        {
+          header: 'Referer',
+          value: '{{ request.url }}'
+        },
+        {
+          header: 'UA',
+          value: '{{ request.headers.user-agent }}'
+        }
+      ],
+      disabled: false
     }
   ]
 };
@@ -145,7 +167,7 @@ describe('Mockit Routes', () => {
         await request(app).get('/getExample').expect(200, { test: true });
       });
       it('when a route is configured with `POST` set as the httpMethod then that route can only be accessed through POST', async () => {
-        await request(app).post('/postExample').expect(200, { test: true });
+        await request(app).post('/postExample').expect(200, { test: true, url: '/postExample' });
       });
       it('when a route is configured with `PUT` set as the httpMethod then that route can only be accessed through PUT', async () => {
         await request(app).put('/putExample').expect(200, { test: true });
@@ -180,5 +202,15 @@ describe('Mockit Routes', () => {
         await request(app).get('/500Example').expect(500);
       });
     });
+
+    describe('redirect', () => {
+      it('when a route has a status code 301 with Location header configured on it, that status code is returned', async () => {
+         await request(app).get('/redirectExample')
+         .expect(301)
+         .expect('Location', '/urlToRedirectTo')
+         .expect('Referer', '/redirectExample');
+      });
+    });
+
   });
 });
