@@ -4,6 +4,9 @@ const path = require('path');
 const app = express();
 const cors = require('cors');
 const handlebars = require("handlebars");
+const helpers = require('handlebars-helpers')({
+  handlebars: handlebars
+});
 
 const port = process.env.PORT || 3000;
 
@@ -49,15 +52,24 @@ routes.forEach((route) => {
       };
 
       headers.forEach(({ header, value } = {}) => {
-        const headerT = handlebars.compile(value);
-        res.set(header, headerT(hbdata));
+        try {
+          const headerT = handlebars.compile(value);
+          res.set(header, headerT(hbdata));
+        } catch (error) {
+          console.log(error);
+        }  
       });
 
       res.status(statusCode)
 
       if(payload){
-        const payloadT = handlebars.compile(JSON.stringify(payload));
-        res.send(JSON.parse(payloadT(hbdata)));
+        try {
+          const payloadT = handlebars.compile(JSON.stringify(payload));
+          res.send(JSON.parse(payloadT(hbdata)));
+        } catch (error) {
+          res.send({ 'error' : error})
+          console.log(error);
+        }  
       } else{
         res.send();
       }
