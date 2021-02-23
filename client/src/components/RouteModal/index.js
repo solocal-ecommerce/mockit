@@ -168,6 +168,13 @@ const Modal = function (props) {
                           </option>
                         ))}
                       </optgroup>
+                      <optgroup aria-label="3xx" label="3xx">
+                        {statusCodeStartingWith('3').map((routeStatusCode) => (
+                          <option key={routeStatusCode} value={routeStatusCode}>
+                            {routeStatusCode}
+                          </option>
+                        ))}
+                      </optgroup>
                       <optgroup aria-label="4xx" label="4xx">
                         {statusCodeStartingWith('4').map((routeStatusCode) => (
                           <option key={routeStatusCode} value={routeStatusCode}>
