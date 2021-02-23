@@ -32,7 +32,7 @@ export const updateRoute = async (data) => {
 };
 
 export const deleteRoute = async (data) => {
-  return await fetch(host+'/route'), {
+  return await fetch(host+'/route', {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json'
