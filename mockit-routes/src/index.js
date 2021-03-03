@@ -3,6 +3,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const app = express();
 const cors = require('cors');
+const bodyParser = require('body-parser');
 const handlebars = require("handlebars");
 
 
@@ -34,6 +35,9 @@ app.use(chaosMonkeyMiddleware);
 if (corsFeature) {
   app.use(cors());
 }
+
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 app.disable('x-powered-by');
 
@@ -69,8 +73,14 @@ routes.forEach((route) => {
 
       if(payload){
         try {
-          const payloadT = handlebars.compile(JSON.stringify(payload));
-          res.send(JSON.parse(payloadT(hbdata)));
+          const keys = Object.keys(payload);
+          if(keys.length==1 && keys[0]=="raw"){
+            const rawBody = handlebars.compile(payload.raw);
+            res.send(rawBody(hbdata))
+          }else{
+            const payloadT = handlebars.compile(JSON.stringify(payload));
+            res.send(JSON.parse(payloadT(hbdata)));  
+          }
         } catch (error) {
           res.send({ 'error' : error})
           console.log(error);
@@ -78,8 +88,6 @@ routes.forEach((route) => {
       } else{
         res.send();
       }
-
-      
     });
   }
 });

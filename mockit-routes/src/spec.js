@@ -126,6 +126,22 @@ const exampleConfig = {
       disabled: false
     },
     {
+      route: '/rawExample',
+      httpMethod: 'GET',
+      statusCode: '200',
+      delay: '0',
+      headers: [
+        {
+          header: 'Content-Type',
+          value: 'application/text'
+        }
+      ],
+      payload: {
+        raw: "UP"
+      },
+      disabled: false
+    },
+    {
       route: '/redirectExample',
       httpMethod: 'GET',
       statusCode: '301',
@@ -219,6 +235,14 @@ describe('Mockit Routes', () => {
          .expect('Referer', '/redirectExample')
          .expect('Token', 'c28ubG9jYWw6ODQ0Mzpuby1zZWNyZXQ=')
          .expect('Authorization', 'so.local:8443:no-secret');
+      });
+    });
+
+    describe('raw body', () => {
+      it('when a route has a payload with one single child named raw, the response body is the raw field', async () => {
+        await request(app).get('/rawExample')
+        .expect(200,"UP")
+        .expect('Content-Type', 'application/text; charset=utf-8');
       });
     });
 
