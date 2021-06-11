@@ -7,6 +7,7 @@ services:
       - 3000:3000
     volumes:
       - ./configuration/routes.json:/usr/src/mockit-routes/configuration/routes.json
+    restart: always
   mockit-server:
     image: 'mockit-server'
     build: 'server'
@@ -14,13 +15,15 @@ services:
       - 4000:4000
     volumes:
       - ./configuration/routes.json:/usr/src/mockit-server/configuration/routes.json
+    restart: always
   mockit-client:
     image: 'mockit-client'
     build: 'client'
     ports:
       - 5000:3000
     environment:
-      - REACT_APP_MOCKIT_SERVER_URL=http://localhost:3000
-      - REACT_APP_MOCKIT_API_URL=http://localhost:4000
+      - REACT_APP_MOCKIT_SERVER_URL=https://seotools.pagesjaunes.fr/mockit
+      - REACT_APP_MOCKIT_API_URL=https://seotools.pagesjaunes.fr/mockit-api
     volumes:
       - ./configuration/routes.json:/usr/src/mockit-client/src/config/routes.json
+    restart: always
